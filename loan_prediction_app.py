@@ -33,16 +33,19 @@ def encode_categorical_features(df):
 
 st.title("Loan Prediction App")
 
-# User Inputs
+# User Inputs with validation
 gender = st.selectbox("Gender", ["Male", "Female"])
 married = st.selectbox("Married", ["Yes", "No"])
 dependents = st.selectbox("Dependents", ["0", "1", "2", "3+"])
 education = st.selectbox("Education", ["Graduate", "Not Graduate"])
 self_employed = st.selectbox("Self Employed", ["Yes", "No"])
-applicant_income = st.number_input("Applicant Income", 0)
-coapplicant_income = st.number_input("Coapplicant Income", 0)
-loan_amount = st.number_input("Loan Amount", 0)
-loan_term = st.number_input("Loan Amount Term", 0)
+
+# Numeric inputs with validation
+applicant_income = st.number_input("Applicant Income", min_value=0, step=1, value=0)
+coapplicant_income = st.number_input("Coapplicant Income", min_value=0, step=1, value=0)
+loan_amount = st.number_input("Loan Amount", min_value=0, step=1, value=0)
+loan_term = st.number_input("Loan Amount Term (in months)", min_value=0, step=1, value=0)
+
 credit_history = st.selectbox("Credit History", [1.0, 0.0])
 property_area = st.selectbox("Property Area", ["Urban", "Semiurban", "Rural"])
 
@@ -76,41 +79,3 @@ if st.button("Predict"):
             st.error("Loan Not Approved")
     except Exception as e:
         st.error(f"Error: {e}")
-
-applicant_income = st.number_input("Applicant Income", 0)
-coapplicant_income = st.number_input("Coapplicant Income", 0)
-loan_amount = st.number_input("Loan Amount", 0)
-loan_term = st.number_input("Loan Amount Term", 0)
-credit_history = st.selectbox("Credit History", [1.0, 0.0])
-property_area = st.selectbox("Property Area", ["Urban", "Semiurban", "Rural"])
-
-# Create DataFrame (remove Loan_ID and Loan_Status)
-df = pd.DataFrame({
-    "Gender": [gender],
-    "Married": [married],
-    "Dependents": [dependents],
-    "Education": [education],
-    "Self_Employed": [self_employed],
-    "ApplicantIncome": [applicant_income],
-    "CoapplicantIncome": [coapplicant_income],
-    "LoanAmount": [loan_amount],
-    "Loan_Amount_Term": [loan_term],
-    "Credit_History": [credit_history],
-    "Property_Area": [property_area]
-})
-
-# Encode categorical features
-df = encode_categorical_features(df)
-
-# Make Prediction
-if st.button("Predict"):
-    try:
-        # Ensure correct feature order here based on model training
-        prediction = model.predict(df)
-
-        if prediction[0] == 1:
-            st.success("Loan Approved")
-        else:
-            st.error("Loan Not Approved")
-    except Exception as e:
-        st
