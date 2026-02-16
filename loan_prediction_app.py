@@ -10,9 +10,26 @@ Original file is located at
 import streamlit as st
 import pandas as pd
 import joblib
+from sklearn.preprocessing import LabelEncoder
 
 # Load model
 model = joblib.load("loan_prediction_model.pkl")
+
+# Initialize the LabelEncoder for categorical features
+label_encoders = {
+    "Gender": LabelEncoder(),
+    "Married": LabelEncoder(),
+    "Dependents": LabelEncoder(),
+    "Education": LabelEncoder(),
+    "Self_Employed": LabelEncoder(),
+    "Credit_History": LabelEncoder(),
+    "Property_Area": LabelEncoder()
+}
+
+def encode_categorical_features(df):
+    for column in label_encoders:
+        df[column] = label_encoders[column].fit_transform(df[column])
+    return df
 
 st.title("Loan Prediction App")
 
@@ -44,10 +61,17 @@ df = pd.DataFrame({
     "Property_Area": [property_area]
 })
 
-if st.button("Predict"):
-    prediction = model.predict(df)
+# Encode categorical features
+df = encode_categorical_features(df)
 
-    if prediction[0] == 1:
-        st.success("Loan Approved")
-    else:
-        st.error("Loan Not Approved")
+# Make Prediction
+if st.button("Predict"):
+    try:
+        prediction = model.predict(df)
+
+        if prediction[0] == 1:
+            st.success("Loan Approved")
+        else:
+            st.error("Loan Not Approved")
+    except Exception as e:
+        st.error(f"Error: {e}")
