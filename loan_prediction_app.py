@@ -64,6 +64,15 @@ df = pd.DataFrame({
     "Property_Area": [property_area]
 })
 
+# Reorder columns to match the model's expected order (excluding Loan_ID and Loan_Status)
+expected_columns = [
+    "Gender", "Married", "Dependents", "Education", "Self_Employed",
+    "ApplicantIncome", "CoapplicantIncome", "LoanAmount", "Loan_Amount_Term",
+    "Credit_History", "Property_Area"
+]
+
+df = df[expected_columns]
+
 # Encode categorical features
 df = encode_categorical_features(df)
 
