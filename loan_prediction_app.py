@@ -4,7 +4,6 @@ import joblib
 
 # Load model and training columns
 model = joblib.load("loan_prediction_model.pkl")
-model_columns = joblib.load("model_columns.pkl")
 label_encoder= joblib.load("label_encoder (1).pkl")
 
 st.title("Loan Prediction App")
@@ -41,19 +40,10 @@ if st.button("Predict"):
 
     # Apply get_dummies like training
     input_data = pd.get_dummies(input_data)
-
-    # Add missing columns
-    for col in model_columns:
-        if col not in input_data.columns:
-            input_data[col] = 0
-
-    # Ensure correct column order
-    input_data = input_data[model_columns]
-
     # Prediction
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.success("Loan Approved ✅")
+        st.success("Loan Approved ")
     else:
-        st.error("Loan Not Approved ❌")
+        st.error("Loan Not Approved ")
