@@ -33,7 +33,7 @@ def encode_categorical_features(df):
 
 st.title("Loan Prediction App")
 
-# User Inputs with validation
+# User Inputs
 gender = st.selectbox("Gender", ["Male", "Female"])
 married = st.selectbox("Married", ["Yes", "No"])
 dependents = st.selectbox("Dependents", ["0", "1", "2", "3+"])
@@ -49,7 +49,7 @@ loan_term = st.number_input("Loan Amount Term (in months)", min_value=0, step=1,
 credit_history = st.selectbox("Credit History", [1.0, 0.0])
 property_area = st.selectbox("Property Area", ["Urban", "Semiurban", "Rural"])
 
-# Create DataFrame for model input
+# Create DataFrame for model input (Exclude Loan_ID and Loan_Status)
 df = pd.DataFrame({
     "Gender": [gender],
     "Married": [married],
