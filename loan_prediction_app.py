@@ -11,7 +11,7 @@ import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder
 
-# Load model
+# Load the trained model
 model = joblib.load("loan_prediction_model.pkl")
 
 # Initialize the LabelEncoder for categorical features
@@ -39,6 +39,44 @@ married = st.selectbox("Married", ["Yes", "No"])
 dependents = st.selectbox("Dependents", ["0", "1", "2", "3+"])
 education = st.selectbox("Education", ["Graduate", "Not Graduate"])
 self_employed = st.selectbox("Self Employed", ["Yes", "No"])
+applicant_income = st.number_input("Applicant Income", 0)
+coapplicant_income = st.number_input("Coapplicant Income", 0)
+loan_amount = st.number_input("Loan Amount", 0)
+loan_term = st.number_input("Loan Amount Term", 0)
+credit_history = st.selectbox("Credit History", [1.0, 0.0])
+property_area = st.selectbox("Property Area", ["Urban", "Semiurban", "Rural"])
+
+# Create DataFrame for model input
+df = pd.DataFrame({
+    "Gender": [gender],
+    "Married": [married],
+    "Dependents": [dependents],
+    "Education": [education],
+    "Self_Employed": [self_employed],
+    "ApplicantIncome": [applicant_income],
+    "CoapplicantIncome": [coapplicant_income],
+    "LoanAmount": [loan_amount],
+    "Loan_Amount_Term": [loan_term],
+    "Credit_History": [credit_history],
+    "Property_Area": [property_area]
+})
+
+# Encode categorical features
+df = encode_categorical_features(df)
+
+# Make Prediction when button is clicked
+if st.button("Predict"):
+    try:
+        prediction = model.predict(df)
+
+        # Display result based on prediction
+        if prediction[0] == 1:
+            st.success("Loan Approved")
+        else:
+            st.error("Loan Not Approved")
+    except Exception as e:
+        st.error(f"Error: {e}")
+
 applicant_income = st.number_input("Applicant Income", 0)
 coapplicant_income = st.number_input("Coapplicant Income", 0)
 loan_amount = st.number_input("Loan Amount", 0)
