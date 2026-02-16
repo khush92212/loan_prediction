@@ -44,7 +44,6 @@ df = pd.DataFrame({
     "Credit_History": [credit_history],
     "Property_Area": [property_area]
 })
-
 if st.button("Predict"):
     prediction = model.predict(df)
 
